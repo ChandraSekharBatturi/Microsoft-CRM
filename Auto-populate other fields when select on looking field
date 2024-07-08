@@ -1,0 +1,39 @@
+function autoPopulateDetails(executionContext) {
+  var formContext = executionContext.getFormContext();
+  //get filed values from Details entity
+  var customerNameFiled = formContext.getAttribute("cre26_customer_name");
+  var emailField = formContext.getAttribute("cre26_email");
+  var phoneField = formContext.getAttribute("cre26_phone");
+  var nameFiled = formContext.getAttribute("cre26_name");
+  var decisionField = formContext.getAttribute("cre26_decisiontaken");
+  var customerName = customerNameFiled.getValue();
+  //check whether customer_name field is selected
+  if (customerName !== null) {
+    var customerValue = customerName[0].id;
+    //will fetch Customers entity record data using Retrieve operation in Xrm.WebApi's
+    Xrm.WebApi.retrieveRecord(
+      customerName[0].entityType,
+      customerValue,
+      "?$select=cre26_customeremailid,cre26_customerphone,cre26_customername,cre26_customerdecision"
+    ).then(
+      //webApi success result capture
+      function success(response) {
+        emailField.setValue(response.cre26_customeremailid);
+        phoneField.setValue(response.cre26_customerphone);
+        nameFiled.setValue(response.cre26_cre26_customernamename);
+        decisionField.setValue(response.cre26_customerdecision);
+      },
+      //webApi failure result capture
+      function (error) {
+        alert("Falied to retrive data with error :" + error.message);
+        console.log("Falied to retrive data with error :" + error.message);
+      }
+    );
+  } //remove all values when deselect customer_name value
+  else {
+    emailField.setValue(null);
+    phoneField.setValue(null);
+    nameFiled.setValue(null);
+    decisionField.setValue(null);
+  }
+}
