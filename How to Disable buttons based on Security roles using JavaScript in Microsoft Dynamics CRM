@@ -1,0 +1,19 @@
+function showButton() {
+	//starting stage button visibility 
+    var bool = true;
+    // id of users security role
+    var userSecurityId = "282f3ffc-2e40-ef11-a316-002248d50abf";//need to capture from associated user role
+    var securityPath = Xrm.Utility.getGlobalContext().userSettings.securityRoles;//return an array object
+
+	//to check whether page is accessed by user or other person
+    for (var i = 0; i < securityPath.length; i++) {
+        if (securityPath[i].toLowerCase() == userSecurityId.toLowerCase()) {
+            // if user is accesed, then update visibility to false
+            bool = false;
+			// as user is found then no need to check for other users
+            break;
+        }
+    }
+	//capture visibility value to be updated to button
+    return bool;
+}
